@@ -23,4 +23,3 @@
 
   Note: that the primary key is set to custom key
 """
-_registered_drivers = {}
