@@ -12,6 +12,5 @@ class TestAbstractConnection(unittest.TestCase):
                                  username="plasmashadow",
                                  password="aidenfrost"
                                  )
-        print obj._connection_url
         self.assertIsNotNone(obj)
 

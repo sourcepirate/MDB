@@ -18,5 +18,5 @@ setup(
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: GLS'
     ],
-     install_requires=['pymongo>=2.8']
+     install_requires=['pymongo>=2.8', 'six >= 1.9.0']
 )

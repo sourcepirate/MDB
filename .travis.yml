@@ -9,5 +9,7 @@ python:
   # maintainers to fix their pypy-dev package.
 # command to install dependencies
 install:
+  - pip install six
+  - pip install pymongo
 # command to run tests
 script: python setup.py install
