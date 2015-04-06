@@ -44,12 +44,31 @@ class Property(object):
 
 
 
-class StringData(Property):
+class Data(Property):
+
+    def __init__(self):
+        self._value = None
+
+    def _validate(self, value):
+        pass
+
+    @property
+    def value(self):
+        return str(self._value)
+
+    @value.setter
+    def value(self, value):
+        self._validate(value)
+        self._value = value
+
+
+
+
+
+class StringData(Data):
     """
        This is Used to represent a string property
     """
-    def __init__(self):
-        self._value = ""
 
     def _validate(self, value):
         """
@@ -60,12 +79,39 @@ class StringData(Property):
         if not isinstance(value, str):
             raise TypeError("String data is not assigned to string Field")
 
-    @property
-    def value(self):
-        return str(self._value)
 
-    @value.setter
-    def value(self, value):
-        self._validate(value)
-        self._value = value
+
+class IntegerData(Data):
+
+    """
+       This is used to represt the integer data stored on to the
+       mongodb
+    """
+    def _validate(self, value):
+        """
+          Trying to validate whether the data is integer or not
+        :param value:
+        :return:
+        """
+        if not isinstance(value, int):
+            raise TypeError("Invalid Integer data")
+
+
+class ListData(Data):
+    """
+       This is used to represent the list data value
+    """
+
+    def _validate(self, value):
+        """
+          Trying to validate the list object
+        :param value:
+        :return:
+        """
+        if not isinstance(value, list):
+            raise TypeError("Invalid List data")
+
+
+
+
 
