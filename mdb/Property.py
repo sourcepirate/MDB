@@ -54,7 +54,7 @@ class Data(Property):
 
     @property
     def value(self):
-        return str(self._value)
+        return self._value
 
     @value.setter
     def value(self, value):

@@ -23,3 +23,6 @@
 
   Note: that the primary key is set to custom key
 """
+from Connection import *
+from Property import *
+from Document import *

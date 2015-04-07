@@ -18,6 +18,6 @@ class StringPropertyTest(unittest.TestCase):
 
         def inner():
             sample = type("Sample", (object,), {'s': StringData()})()
-            sample.s = 3
+            sample.s = "hello"
 
         self.assertRaises(TypeError, inner)

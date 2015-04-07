@@ -36,9 +36,22 @@ class AbstractConnection(object):
         :param new: if this paramter is True it returns the new session to the user
         :return:
         """
-        if self._session and new:
+        if self._session and not new:
             return self._session
         self._session = MongoClient(self._connection_url)
         return self._session
+
+
+_engine_connection = None
+
+def create_engine(host=None, username=None, password=None, port=27017, create_new = False):
+    """
+
+    :type create_new: Used to denote whether the library can reuse
+                      the existing session or not.
+    """
+    mongo_connection = AbstractConnection(host=host, username=username, password=password, port=port)
+    _engine_connection = mongo_connection._connect(create_new)
+
 
 
