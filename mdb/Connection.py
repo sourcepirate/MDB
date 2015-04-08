@@ -9,7 +9,7 @@ class AbstractConnection(object):
       An Abstract Class for holding connection objects.
     """
 
-    def __init__(self, host=None, username=None, password=None, port=27017):
+    def __init__(self, host=None, username=None, password=None, port=27017, database = None):
         """
         Gets the requested Parameters from the user and establishes the connection to mongodb
         :param host: hostname/public IP Address
@@ -22,11 +22,13 @@ class AbstractConnection(object):
         self._port = port
         self._user = username
         self._pass = password
+        self._db = database
         ub = UrlBuilder(scheme="mongodb",
                         host=self._host,
                         port=self._port,
                         username=self._user,
-                        password=self._pass)
+                        password=self._pass,
+                        database=self._db)
         self._connection_url = str(ub)
         self._session = None
 
@@ -44,13 +46,13 @@ class AbstractConnection(object):
 
 _engine_connection = None
 
-def create_engine(host=None, username=None, password=None, port=27017, create_new = False):
+def create_engine(host=None, username=None, password=None, port=27017, database=None, create_new = False):
     """
 
     :type create_new: Used to denote whether the library can reuse
                       the existing session or not.
     """
-    mongo_connection = AbstractConnection(host=host, username=username, password=password, port=port)
+    mongo_connection = AbstractConnection(host=host, username=username, password=password, port=port, database=database)
     _engine_connection = mongo_connection._connect(create_new)
 
 

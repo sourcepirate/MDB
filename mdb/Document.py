@@ -1,7 +1,7 @@
 __author__ = 'plasmashadow'
 
 import six
-
+import json
 from Property import Property
 
 class ModelMeta(type):
@@ -60,7 +60,6 @@ class Document(Model):
     @classmethod
     def save(cls):
         cls._construct_fields()
-
 
 
 

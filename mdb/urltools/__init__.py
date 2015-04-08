@@ -6,13 +6,14 @@ class UrlError(Exception):
 
 
 class UrlBuilder(object):
-    def __init__(self, scheme=None, username=None, password=None, host=None, port=None, path=None):
+    def __init__(self, scheme=None, username=None, password=None, host=None, port=None, path=None, database=None):
         self.scheme = scheme
         self.password = password
         self.username = username
         self.host = host
         self.path = path
         self.port = port
+        self.database = database
 
     def _build_user_pass_string(self):
         if self.username and self.password:
@@ -35,16 +36,22 @@ class UrlBuilder(object):
         h_part = self._build_domain_port_string()
         if u_part.count(":") and h_part.count(":"):
             return "@".join([u_part, h_part])
-        if u_part.count(":"):
+        if u_part:
             return "@".join([u_part, h_part])
+        else:
+            return h_part
 
     def _build_url(self):
         if self.scheme:
             return "://".join([self.scheme, self._build_main_string()])
         raise UrlError("Scheme Not specified")
 
+    def _build(self):
+        if self.database:
+            return "/".join([self._build_url(), self.database])
+
     def __str__(self):
-        return "/".join([self._build_url(), ''])
+        return "/".join([self._build(), ''])
 
 
 class UrlBuilder2(object):
@@ -111,6 +118,7 @@ class UrlBuilder2(object):
         if self.scheme:
             return "://".join([self.scheme, self._build_main_string()])
         raise UrlError("Scheme Not specified")
+
 
     def __str__(self):
         return "/".join([self._build_url(), ''])

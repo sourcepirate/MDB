@@ -9,8 +9,7 @@ class TestAbstractConnection(unittest.TestCase):
 
     def TestUrlParse(self):
         obj = AbstractConnection(host="localhost",
-                                 username="plasmashadow",
-                                 password="aidenfrost"
+                                 database = "chatforge"
                                  )
         self.assertIsNotNone(obj)
 
