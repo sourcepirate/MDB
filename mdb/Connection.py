@@ -44,16 +44,7 @@ class AbstractConnection(object):
         return self._session
 
 
-_engine_connection = None
 
-def create_engine(host=None, username=None, password=None, port=27017, database=None, create_new = False):
-    """
-
-    :type create_new: Used to denote whether the library can reuse
-                      the existing session or not.
-    """
-    mongo_connection = AbstractConnection(host=host, username=username, password=password, port=port, database=database)
-    _engine_connection = mongo_connection._connect(create_new)
 
 
 

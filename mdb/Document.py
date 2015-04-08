@@ -41,10 +41,9 @@ class Model(six.with_metaclass(ModelMeta)):
         :return:
         """
         pass
-from Connection import _engine_connection
+
 class Document(Model):
-    fields = {}
-    driver = _engine_connection
+    fieldes = {}
 
     @classmethod
     def _construct_fields(cls):
@@ -52,14 +51,19 @@ class Document(Model):
         This is used to construct all the fields and appropriate value
         :return:
         """
+        cls.fieldes = {}
         for attribute in cls.attrs:
             if not isinstance(cls.attrs[attribute], Property):
                 continue
-            cls.fields[attribute] = cls.attrs[attribute].value
+            cls.fieldes[attribute] = cls.attrs[attribute].value
 
     @classmethod
     def save(cls):
         cls._construct_fields()
+        driver = getattr(cls, '__connection__')
+        collection = getattr(driver, cls.__name__)
+        collection.insert(cls.fieldes)
+
 
 
 

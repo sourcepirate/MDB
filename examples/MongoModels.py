@@ -3,10 +3,10 @@ __author__ = 'plasmashadow'
 import mdb
 from mdb import create_engine
 
-create_engine(host="localhost", database="opendesk")
+conn = create_engine(host="localhost", database="opendesk")
 
 class SampleDoc(mdb.Document):
-    __collectionname__ = "name"
+    __connection__ = conn
     name = mdb.StringData()
     age = mdb.IntegerData()
 
