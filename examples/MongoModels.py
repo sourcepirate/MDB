@@ -9,7 +9,7 @@ class SampleDoc(mdb.Document):
     __connection__ = conn
     name = mdb.StringData()
     age = mdb.IntegerData()
-
+#
 class Sample(mdb.Document):
     __connection__ = conn
     name = mdb.StringData()
@@ -17,19 +17,21 @@ class Sample(mdb.Document):
 
 s = SampleDoc()
 s.name = "sathya"
-s.age = 34
+s.age = 23
 s.save()
-s.delete()
+# s.delete()
+#
+# d = SampleDoc()
+#
+# d.name = "adhi"
+# d.age  = 23
+# d.save()
+# d.delete()
 
-d = SampleDoc()
-
-d.name = "adhi"
-d.age  = 23
-d.save()
-d.delete()
+# SampleDoc._get_by_id("5529409f85518d2d6c62b6d0")
 
 s = Sample()
 s.name = "hg"
 s.age = 123
 s.save()
-s.delete()
+# s.delete()
