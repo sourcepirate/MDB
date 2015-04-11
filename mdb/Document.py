@@ -4,6 +4,7 @@ import six
 import json
 from Property import Property
 
+
 class ModelMeta(type):
     """
     Meta class for all Mongodb models
@@ -59,10 +60,28 @@ class Document(Model):
 
     @classmethod
     def save(cls):
+        """
+          Save method saves the object and returns the id of saved object
+        :return: id which represents the primary key.
+        """
         cls._construct_fields()
         driver = getattr(cls, '__connection__')
         collection = getattr(driver, cls.__name__)
-        collection.insert(cls.fieldes)
+        id = collection.insert(cls.fieldes)
+        return id
+
+    @classmethod
+    def delete(cls):
+        id = cls.fieldes['_id']
+        driver = getattr(cls, '__connection__')
+        collection = getattr(driver, cls.__name__)
+        g = collection.remove({'_id': id})
+        return g
+
+    @classmethod
+    def get_by_id(cls, id):
+        pass
+
 
 
 

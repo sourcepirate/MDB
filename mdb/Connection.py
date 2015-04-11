@@ -8,7 +8,6 @@ class AbstractConnection(object):
     """
       An Abstract Class for holding connection objects.
     """
-
     def __init__(self, host=None, username=None, password=None, port=27017, database = None):
         """
         Gets the requested Parameters from the user and establishes the connection to mongodb
