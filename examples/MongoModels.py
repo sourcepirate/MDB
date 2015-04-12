@@ -15,9 +15,8 @@ class DocumentConfig(mdb.Document, Meta):
 class SampleDoc(DocumentConfig):
     name = mdb.StringData()
     age = mdb.IntegerData()
-#
+
 class Sample(mdb.Document, Meta):
-    __connection__ = conn
     name = mdb.StringData()
     age = mdb.IntegerData()
 
@@ -26,7 +25,7 @@ s.name = "sathya"
 s.age = 23
 s.save()
 
-SampleDoc.get_by_id()
+print SampleDoc.get_by_id("55295ec885518d43b5ecc3e6")
 # s.delete()
 #
 # d = SampleDoc()

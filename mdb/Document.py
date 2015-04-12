@@ -7,6 +7,7 @@ from bson.objectid import ObjectId
 
 
 
+
 class ModelMeta(type):
     """
     Meta class for all Mongodb models
@@ -62,8 +63,27 @@ class Document(Model):
     def to_dict(self):
         return json.dumps(self.fields)
 
+
     @classmethod
-    def get_by_id(cls,id):
+    def get_by_id(cls, id):
         from bson.objectid import ObjectId
         ids = ObjectId(id)
-        
+        collection = getattr(cls.connection, cls.__name__)
+        result = collection.find({"_id": ids})
+        result = [r for r in result]
+        instance = cls()
+        for r in result:
+            instance.fields = r
+            instance.connection =
+    @classmethod
+    def to_csv(cls):
+        pass
+
+    @staticmethod
+    def _get_result_from_gen(gen):
+        result_set = [r for r in gen]
+        return result_set if len(result_set) >1 else result_set.pop()
+
+
+
+
