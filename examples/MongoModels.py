@@ -5,12 +5,18 @@ from mdb import create_engine
 
 conn = create_engine(host="localhost", database="opendesk")
 
-class SampleDoc(mdb.Document):
-    __connection__ = conn
+
+class Meta:
+    connection = conn
+
+class DocumentConfig(mdb.Document, Meta):
+    pass
+
+class SampleDoc(DocumentConfig):
     name = mdb.StringData()
     age = mdb.IntegerData()
 #
-class Sample(mdb.Document):
+class Sample(mdb.Document, Meta):
     __connection__ = conn
     name = mdb.StringData()
     age = mdb.IntegerData()
@@ -19,6 +25,8 @@ s = SampleDoc()
 s.name = "sathya"
 s.age = 23
 s.save()
+
+SampleDoc.get_by_id()
 # s.delete()
 #
 # d = SampleDoc()
@@ -30,8 +38,8 @@ s.save()
 
 # SampleDoc._get_by_id("5529409f85518d2d6c62b6d0")
 
-s = Sample()
-s.name = "hg"
-s.age = 123
-s.save()
+# s = Sample()
+# s.name = "hg"
+# s.age = 123
+# s.save()
 # s.delete()

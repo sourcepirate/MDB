@@ -17,7 +17,6 @@ class ModelMeta(type):
     def __init__(self , name, bases, attrs):
         super(ModelMeta, self).__init__(name, bases, attrs)
         self.attrs = attrs
-        self.connection = attrs.get('__connection__')
 
 
 
@@ -43,6 +42,8 @@ class Document(Model):
         if self.fields.get("_id"):
             id = collection.insert(self.fields)
             return id
+
+        id = collection.insert(self.fields)
         self.fields.update({'_id': ObjectId(id)})
         print self.fields
         return id
@@ -61,16 +62,8 @@ class Document(Model):
     def to_dict(self):
         return json.dumps(self.fields)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @classmethod
+    def get_by_id(cls,id):
+        from bson.objectid import ObjectId
+        ids = ObjectId(id)
+        
