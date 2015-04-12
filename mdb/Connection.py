@@ -1,46 +1,102 @@
 __author__ = 'plasmashadow'
 
-from pymongo import MongoClient
+from pymongo.connection import Connection as MongoConnection
+from pymongo.errors import ConnectionFailure
 from mdb.urltools import UrlBuilder
 
 
-class AbstractConnection(object):
+class Connection(object):
     """
-      An Abstract Class for holding connection objects.
+    Acts as a connection Class
     """
-    def __init__(self, host=None, username=None, password=None, port=27017, database = None):
-        """
-        Gets the requested Parameters from the user and establishes the connection to mongodb
-        :param host: hostname/public IP Address
-        :param username: username for the connection None is not specified
-        :param password: password for getting connected to the database
-        :param port: Port in which it has to be connected
-        :return:
-        """
-        self._host = host
-        self._port = port
-        self._user = username
-        self._pass = password
-        self._db = database
-        ub = UrlBuilder(scheme="mongodb",
-                        host=self._host,
-                        port=self._port,
-                        username=self._user,
-                        password=self._pass,
-                        database=self._db)
-        self._connection_url = str(ub)
-        self._session = None
+    _instance = None
+    _connection = None
+    _dbs  = None
+    _session = None
 
-    def _connect(self, new=False):
+    @classmethod
+    def get_instance(cls):
         """
-          returns the database session to the user
-        :param new: if this paramter is True it returns the new session to the user
+        Acts as a singleton to get the connection object
         :return:
         """
-        if self._session and not new:
-            return self._session
-        self._session = MongoClient(self._connection_url)
-        return self._session
+        if not cls._instance:
+            cls._instance = Connection()
+        return cls._instance
+
+    @classmethod
+    def connect(cls, database=None, *args, **kwargs ):
+        if not kwargs.get("host"):
+            raise TypeError("Host should be specified")
+
+        host = kwargs.get("host")
+        port = kwargs.get("port") if kwargs.get("port") else 27017
+        scheme = "mongodb"
+        username = kwargs.pop("username") if kwargs.get("username") else None
+        password = kwargs.pop("password") if kwargs.get("password") else None
+        url = UrlBuilder(scheme=scheme, host=host, port=port, username=username, password=password, database = None)
+        url_string = str(url)
+        conn = cls.get_instance()
+        conn._connection = MongoConnection(*args, **kwargs)
+        conn._dbs = database
+        return conn._connection
+
+    def get_connection(self, dbstring):
+        if not self._connection:
+            raise ConnectionFailure("No connection to db")
+        if not dbstring:
+            if not self._dbs:
+                raise TypeError("Database should be specified")
+            database = self._dbs
+        else:
+            database = dbstring
+        return self._connection[database]
+
+    def get_collection(self, collection, database):
+        return self.get_connection(database=database)[collection]
+
+class Transaction(object):
+
+    def __init__(self, database , *args, **kwargs):
+        """
+        Stores for transaction
+        :param database:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.database = database
+        self.connection = None
+        self.args = args
+        self.kwargs = kwargs
+
+    def connect(self):
+        connection = Connection()
+        connection._dbs = self.database
+        connection._connection = MongoConnection(*self.args, **self.kwargs)
+        self.connection = connection
+
+    def disconnect(self):
+        self.connection._connection.disconnect()
+
+    def __enter__(self):
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect()
+
+def create_engine(*args,**kwargs):
+    return Connection.connect(*args, **kwargs)
+
+
+def session(database, *args, **kwargs):
+    return Transaction(database, *args, **kwargs)
+
+
+
+
+
 
 
 
