@@ -7,11 +7,11 @@ from mdb.urltools import UrlBuilder
 
 class Connection(object):
     """
-    Acts as a connection Class
+    Acts as a connection Class used to hold connection object
     """
     _instance = None
     _connection = None
-    _dbs  = None
+    _dbs = None
     _session = None
 
     @classmethod
@@ -25,7 +25,14 @@ class Connection(object):
         return cls._instance
 
     @classmethod
-    def connect(cls, database=None, *args, **kwargs ):
+    def connect(cls, database=None, *args, **kwargs):
+        """
+        This is used to establish connection with the mongodb database
+        :param database: database to which it is connected.
+        :param args: arguments for the callback
+        :param kwargs: kwargs for getting the required data such as host,port etc
+        :return: plain connection object
+        """
         if not kwargs.get("host"):
             raise TypeError("Host should be specified")
 
@@ -42,6 +49,12 @@ class Connection(object):
         return conn._connection
 
     def get_connection(self, dbstring):
+        """
+           Used to establish the connection by returning the connection to
+           the specified database
+        :param dbstring: String which indicates the database name
+        :return: connection to the particular database
+        """
         if not self._connection:
             raise ConnectionFailure("No connection to db")
         if not dbstring:
@@ -71,15 +84,27 @@ class Transaction(object):
         self.kwargs = kwargs
 
     def connect(self):
+        """
+          Getting the connection with the database and store the connection on to its Connection object
+        :return:
+        """
         connection = Connection()
         connection._dbs = self.database
         connection._connection = MongoConnection(*self.args, **self.kwargs)
         self.connection = connection
 
     def disconnect(self):
+        """
+        Disconnects from the mongodb
+        :return:
+        """
         self.connection._connection.disconnect()
 
     def __enter__(self):
+        """
+          Can be used along with statement
+        :return:
+        """
         self.connect()
         return self
 
@@ -87,10 +112,23 @@ class Transaction(object):
         self.disconnect()
 
 def create_engine(*args,**kwargs):
+    """
+      Store the connection value on to the connection object
+    :param args:
+    :param kwargs:
+    :return:
+    """
     return Connection.connect(*args, **kwargs)
 
 
 def session(database, *args, **kwargs):
+    """
+    Stores the session or transaction
+    :param database:
+    :param args:
+    :param kwargs:
+    :return:
+    """
     return Transaction(database, *args, **kwargs)
 
 
