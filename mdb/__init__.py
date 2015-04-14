@@ -27,6 +27,8 @@ from Connection import *
 from Property import *
 from Document import *
 
+AUTO_CREATE_FIELDS = False
+
 class EngineException(Exception):
     pass
 
