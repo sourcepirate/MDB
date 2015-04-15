@@ -218,12 +218,57 @@ class Document(dict, six.with_metaclass(ModelMeta)):
         collection = cls._get_collection()
         return collection.update(*args, **kwargs)
 
-    def _instance_update(self):
+    def _instance_update(self, **kwargs):
         """
           Used as wrapper for Pymongo's update
         :return:
         """
-        pass
+        object_id = self._get_id()
+        if not object_id:
+            raise InvalidUpdate("Invalid Update Call")
+        spec = {self._id_field: object_id}
+        pass_kwargs = {}
+        if "safe" in kwargs:
+            pass_kwargs["safe"] = kwargs.pop("safe")
+        body = {}
+        checks = []
+        for key, value in kwargs.iteritems():
+            if key in self._fields.values():
+                setattr(self, key, value)
+            else:
+                self[key] = value
+            checks.append(key)
+            field = getattr(self.__class__, key)
+            field_name = field._get_field_name(self)
+            body[field_name] = self[field_name]
+            logging.debug("Checking fields (%s).", checks)
+            self._check_required(*checks)
+            collection = self._get_collection()
+            #mongodb uses set to store the body of mongodb collections
+            return collection.update(spec, {"$set": body}, **pass_kwargs)
+
+
+    update = BiContextual("update")
+
+    def _check_required(self, *field_names):
+        """
+          The field uses required to mark the mandatory
+          fields. So we need to check if all the required
+          fields are been present.
+        :return:
+        """
+        if not field_names:
+            field_names = self._fields.values()
+
+        for field_name in field_names:
+
+            field_value = getattr(self.__class__, field_name)
+            #the name on what it is stored on mongodb
+            storage_name = field_value._get_field_name(self)
+            if storage_name not in self:
+                if field_value.requried:
+                    raise EmptyProperty("Required property is left empyty %s"%storage_name)
+
 
 
 
