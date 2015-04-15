@@ -27,9 +27,9 @@ class Property(object):
         self._required = kwargs.get("required", False) or False
         if "default" in kwargs:
             self.default = kwargs["default"]
-        _set_callback = getattr(self, "_set_callback")
-        _get_callback = getattr(self, "_get_callback")
-        _force_callback = getattr(self, "_force_callback")
+        _set_callback = getattr(self, "_set_callback", None)
+        _get_callback = getattr(self, "_get_callback", None)
+        _force_callback = getattr(self, "_force_callback", None)
 
         self._set_callback = kwargs.get("_set_callback", _set_callback)
         self._get_callback = kwargs.get("_get_callback", _get_callback)

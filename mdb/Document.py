@@ -5,7 +5,9 @@ import json
 import mdb
 from mdb.Property import Property, EmptyProperty
 from mdb.Cursor import Cursor
-from mdb import notinstancemethod
+from mdb.Connection import Connection
+from mdb.Decorators import notinstancemethod
+from mdb.Decorators import deprecated
 
 """used to check for older dependencies"""
 try:
@@ -172,7 +174,7 @@ class Document(dict, six.with_metaclass(ModelMeta)):
             attr = getattr(cls, attr_key)
             if not isinstance(attr, Property):
                 continue
-            cls.__fields[attr.id] = attr_key
+            cls.__fields[attr._id] = attr_key
 
     @classmethod
     def add_field(cls, field_name, new_field_descriptor):
@@ -268,6 +270,229 @@ class Document(dict, six.with_metaclass(ModelMeta)):
             if storage_name not in self:
                 if field_value.requried:
                     raise EmptyProperty("Required property is left empyty %s"%storage_name)
+
+    def delete(self, *args, **kwargs):
+        """
+        Used to Remove a model
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if not self._get_id():
+            raise ValueError("No id has been set so removel is impossible")
+        collection = self._get_collection()
+        return self.remove(self._get_id(), *args, **kwargs)
+
+    @notinstancemethod
+    def remove(cls, *args, **kwargs):
+        """
+         Just a Wrapper Around the Collection Remove
+        :return:
+        """
+        if not args:
+            raise ValueError("Remove requires an Object to be passed to it")
+        collection = cls._get_collection()
+        return collection.remove(*args, **kwargs)
+
+    @notinstancemethod
+    def drop(cls, *args, **kwargs):
+        """
+          Just a Wrapper around Pymongo Drop
+        :param cls:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if not args:
+             raise ValueError("Remove requires an Object to be passed to it")
+        collection = cls._get_collection()
+        return collection.drop(*args, **kwargs)
+
+    @property
+    def id(self):
+        return self._get_id()
+
+    _id = id
+
+    @classmethod
+    def find(cls, *args, **kwargs):
+        """
+        Its just a wrapper for collection find -one
+        :type kwargs: object
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if kwargs and not args:
+            raise ValueError("Find One need to get Proper key value pair for querying")
+
+        return Cursor(cls, *args, **kwargs)
+
+    @classmethod
+    def find_one(cls, *args, **kwargs):
+        """
+        Its just a wrapper for collection find -one
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if kwargs and not args:
+            raise ValueError("Find One need to get Proper key value pair for querying")
+        collection = cls._get_collection()
+        result = collection.find_one(*args, **kwargs)
+        if result:
+            result = cls(**result)
+        return result
+
+
+    @classmethod
+    def group(cls, *args, **kwargs):
+        """
+        Its just a wrapper for Pymong Group
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        return cls._get_collection().group(*args, **kwargs)
+
+    @classmethod
+    def search(cls, **kwargs):
+        """
+        Used to search
+        :param kwargs:
+        :return:
+        """
+        query = {}
+        for key, value in kwargs.iteritems():
+
+            if isinstance(key, Document):
+                # used to get the reference model
+                value = value._get_ref()
+            field = getattr(cls, key)
+            if field._field_name:
+                key = field._field_name
+
+            query[key] = value
+        return cls.find(query)
+
+    @classmethod
+    def search_or_create(cls, **kwargs):
+        """
+        Search for the instance that matches with kwargs
+        else creates it
+        :param kwargs:
+        :return:
+        """
+        obj = cls.search(**kwargs).first()
+        if obj:
+            return obj
+        return cls.create(**kwargs)
+
+    @classmethod
+    def first(cls, **kwargs):
+        """
+        Returns the first matching occurance
+        :param kwargs:
+        :return:
+        """
+        return cls.search(**kwargs).first()
+
+    @classmethod
+    def grap(cls, objectid):
+        """
+        Used to Retrive the key id
+        :param objectid:
+        :return:
+        """
+        if type(objectid) != cls._id_type:
+            objectid = cls._id_type(objectid)
+        return cls.find_one({cls._id_field: objectid})
+
+    @classmethod
+    def create_index(cls, *args, **kwargs):
+        return cls._get_collection().create_index(*args, **kwargs)
+
+
+    @classmethod
+    def ensure_index(cls, *args, **kwargs):
+        return cls._get_collection().ensure_index(*args, **kwargs)
+
+    @classmethod
+    def drop_indexes(cls, *args, **kwargs):
+        return cls._get_collection().drop_indexes(*args, **kwargs)
+
+    @classmethod
+    def distinct(cls, key):
+        return cls.find().distinct(key)
+
+    @classmethod
+    def _get_collection(cls):
+        """
+        Used to get the collection from Mongodb Connection object
+        :return:
+        """
+        if cls._collection:
+            conn = Connection._get_instance()
+            collection = conn.get_connection(cls._get_name())
+            cls._collection = cls
+        return cls._collection
+
+    @classmethod
+    def _get_name(cls):
+        """
+        Retrieves the collection name.
+        Overwrite _name to set it manually.
+        """
+        if cls._name:
+            return cls._name
+        return cls.__name__.lower()
+
+    def __eq__(self, other):
+
+        my_id = self._get_id()
+        that_id = other._get_id()
+        if self._get_name() == other._get_name() and that_id and my_id and that_id ==my_id:
+            return True
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+
+    @classmethod
+    def count(cls):
+        return cls.find().count()
+
+    @notinstancemethod
+    def make_ref(cls, idval):
+        """ Generates a DBRef for a given id. """
+        if type(idval) != cls._id_type:
+            # Casting to ObjectId (or str, or whatever is configured)
+            idval = cls._id_type(idval)
+        return DBRef(cls._get_name(), idval)
+
+    def get_ref(self):
+        """ Returns a DBRef for an document. """
+        return DBRef(self._get_name(), self._get_id())
+
+    def __unicode__(self):
+        """ Returns string representation. Overwrite in custom models. """
+        return "<MogoModel:%s id:%s>" % (self._get_name(), self._get_id())
+
+    def __repr__(self):
+        """ Just points to __unicode__ """
+        return self.__unicode__()
+
+    def __str__(self):
+        """ Just points to __unicode__ """
+        return self.__unicode__()
+
+
+
+
+
+
+
 
 
 
