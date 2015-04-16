@@ -36,7 +36,7 @@ class Property(object):
         self._force_callback = kwargs.get("_force_callback", _force_callback)
         #used to index the field
         self._id = id(self)
-        self._field_name = self.__class__.__name__
+        self._field_name = kwargs.get("field_name", None)
 
     def __get__(self, instance, owner):
         """
@@ -63,6 +63,7 @@ class Property(object):
         :return:
         """
         field_name = self._get_field_name(instance)
+        # print "field name is ",field_name
         value = None
         if not field_name in instance:
             if self._required:
@@ -104,6 +105,7 @@ class Property(object):
         :return:
         """
         field_name = self._get_field_name(instance)
+        # print "field name is ", field_name
         try:
             self._check_value_types(value, field_name)
         except TypeError as e:
@@ -114,6 +116,7 @@ class Property(object):
 
         if self._set_callback:
             value = self._set_callback(instance, value)
+
         instance[field_name] = value
 
 
@@ -137,7 +140,13 @@ class ReferenceProperty(Property):
 
 
 
+class StringProperty(Property):
 
+    def _get_callback(self, instance, value):
+        return str(value)
+
+    def _set_callback(self, instance, value):
+        return str(value)
 
 
 

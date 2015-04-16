@@ -65,10 +65,12 @@ class ModelMeta(type):
 
     def __setattr__(cls, key, value):
         super(ModelMeta, cls).__setattr__(key, value)
+        print value
         if isinstance(value, Property):
             cls._update_fields()
 
-class Document(dict, six.with_metaclass(ModelMeta)):
+class Document(six.with_metaclass(ModelMeta, dict)):
+
     """
       The Base Document Object Centered around the Mongodb model
     """
@@ -145,7 +147,7 @@ class Document(dict, six.with_metaclass(ModelMeta)):
 
         for field_name in self._fields.values():
             attr = getattr(self.__class__, field_name)
-            self._fields[attr.id] = field_name
+            self._fields[attr._id] = field_name
             attr._set_default(self, field_name)
 
     @property
@@ -206,6 +208,7 @@ class Document(dict, six.with_metaclass(ModelMeta)):
         self._check_required()
         new_object_id = collection.save(self.copy(), *args, **kwargs)
         if not self._get_id():
+            #self._id_field = new_object_id
             super(Document, self).__setattr__(self._id_field, new_object_id)
         return new_object_id
 
@@ -220,7 +223,7 @@ class Document(dict, six.with_metaclass(ModelMeta)):
         collection = cls._get_collection()
         return collection.update(*args, **kwargs)
 
-    def _instance_update(self, **kwargs):
+    def _instance_update(self,*args, **kwargs):
         """
           Used as wrapper for Pymongo's update
         :return:
@@ -356,7 +359,7 @@ class Document(dict, six.with_metaclass(ModelMeta)):
         return cls._get_collection().group(*args, **kwargs)
 
     @classmethod
-    def search(cls, **kwargs):
+    def search(cls, *args, **kwargs):
         """
         Used to search
         :param kwargs:
@@ -431,10 +434,10 @@ class Document(dict, six.with_metaclass(ModelMeta)):
         Used to get the collection from Mongodb Connection object
         :return:
         """
-        if cls._collection:
-            conn = Connection._get_instance()
-            collection = conn.get_connection(cls._get_name())
-            cls._collection = cls
+        if not cls._collection:
+            conn = Connection.get_instance()
+            collection = conn.get_collection(cls._get_name(), cls.__name__)
+            cls._collection = collection
         return cls._collection
 
     @classmethod

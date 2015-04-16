@@ -48,7 +48,7 @@ class Connection(object):
         conn._dbs = database
         return conn._connection
 
-    def get_connection(self, dbstring):
+    def get_connection(self, database=None):
         """
            Used to establish the connection by returning the connection to
            the specified database
@@ -57,16 +57,16 @@ class Connection(object):
         """
         if not self._connection:
             raise ConnectionFailure("No connection to db")
-        if not dbstring:
+        if not database:
             if not self._dbs:
                 raise TypeError("Database should be specified")
             database = self._dbs
         else:
-            database = dbstring
+            database = database
         return self._connection[database]
 
     def get_collection(self, collection, database):
-        return self.get_connection(database=database)[collection]
+        return self.get_connection(database=database.lower())[collection]
 
 class Transaction(object):
 

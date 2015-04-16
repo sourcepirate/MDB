@@ -49,6 +49,8 @@ class UrlBuilder(object):
     def _build(self):
         if self.database:
             return "/".join([self._build_url(), self.database])
+        else:
+            return self._build_url()
 
     def __str__(self):
         return "/".join([self._build(), ''])

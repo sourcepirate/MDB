@@ -26,7 +26,7 @@ class Cursor(MongoCursor):
         self._order_entities = []
         self._query = spec
         self._model = model
-        MongoCursor.__init__(self, model.get_collection(), spec, *args, **kwargs)
+        MongoCursor.__init__(self, model._get_collection(), spec, *args, **kwargs)
 
     def next(self):
         """
@@ -86,4 +86,5 @@ class Cursor(MongoCursor):
 
     def change(self, **kwargs):
         modifier = {"$set": kwargs}
+        print modifier
         return self.update(modifier)
