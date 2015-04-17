@@ -12,4 +12,18 @@
  
  create_engine(database ="Management", host= "localhost", port=27017)
  
+ class Management(mdb.Document):
+     name = mdb.StringProperty()
+     age = mdb.IntegerProperty()
+ 
+ m = Management(name = "sathya", age =23)
+ m.save()
+ 
+ #inorder to query the entity
+ 
+ cursor = Management.find({"name":"sathya"})
+ for element in cursor:
+    print element[0].name,element[0].age
+    
+
  ```
