@@ -1,13 +1,18 @@
 from setuptools import setup
 
+def readme():
+    return open("README.md").read()
+
 setup(
     name = 'MDB',
     packages = ['mdb'],
     version = '0.0.1',
+    long_description= readme(),
     description = 'MongoDB Models',
     author='plasmashadow',
     author_email='plasmashadowx@gmail.com',
     url='https://github.com/RevelutionWind/MDB.git',
+    license="BSD 2-Claus",
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
@@ -18,5 +23,6 @@ setup(
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: GLS'
     ],
-     install_requires=['pymongo>=2.8', 'six >= 1.9.0']
+    install_requires=['pymongo>=2.8', 'six >= 1.9.0'],
+    test_suite="test"
 )

@@ -148,6 +148,14 @@ class StringProperty(Property):
     def _set_callback(self, instance, value):
         return str(value)
 
+class IntegerProperty(Property):
+
+    def _get_callback(self, instance, value):
+        return int(value)
+
+    def _set_callback(self, instance, value):
+        return int(value)
+
 
 
 

@@ -208,8 +208,8 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         self._check_required()
         new_object_id = collection.save(self.copy(), *args, **kwargs)
         if not self._get_id():
-            #self._id_field = new_object_id
-            super(Document, self).__setattr__(self._id_field, new_object_id)
+            self._id_field = new_object_id
+            #super(Document, self).__setattr__(self._id_field, new_object_id)
         return new_object_id
 
     @classmethod

@@ -1,6 +1,5 @@
-
 import unittest
-import ConnectionTest
-import PropertyTest
 
-unittest.main()
+from mdb.Connection import create_engine
+import mdb
+

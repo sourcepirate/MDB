@@ -3,16 +3,16 @@ __author__ = 'plasmashadow'
 
 from mdb.Connection import create_engine
 import mdb
-class MyModel(mdb.Document):
+class Management(mdb.Document):
 
     name = mdb.StringProperty(str, required=True)
-    age = mdb.StringProperty(int, required=True)
+    age = mdb.StringProperty(str, required=True)
 
 create_engine(database ="opendesk", host= "localhost", port=27017)
 
 
 # m.save()
-m = MyModel(name = "sathya", age= 13)
-print m.name
-c = MyModel.search({"name": "sathya"})
-c[0]
+m = Management(name = "sathya", age= 13)
+m.save()
+cs = Management.find({"name":"sathya"})
+print cs[0].name
