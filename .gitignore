@@ -1,2 +1,5 @@
 .idea/*
 *.pyc
+dist/*
+MDB.egg-info/*
+mondb.egg-info/*
