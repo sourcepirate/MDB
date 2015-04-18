@@ -9,17 +9,14 @@ install:
 - pip install six
 - pip install pymongo
 - pip install python-coveralls
-
 script: python setup.py install
-
 after_success:
-  - coveralls
-
+- coveralls
 deploy:
   provider: pypi
   user: plasmashadow
   password:
-    secure: bdd575wQohTb2ZnC1wBw3jvh0X05cnixx/4njrpioXLkyU/DDVQmKSk/4/sq4C+xN1haQwBdU9x+OHiyy1KgM/Qzm02P+2a0j3ux9Gq/UQwLJPTHAqw1J6yNB4+6VAPBO11h2zP6saRmBLNgNVNzr4kzj7+HZUz46rJ0mnC5ugc=
+    secure: pAcn6F8lBPUMUpPSDxTr20flRijyqTfvWI9tgr0+PSTT53kOY3fRiE6b6EOEMvNbw6Avt7VxYgBCE7Rk1wspDQw3Q+8wSwYUC8REN4E5OWOvRE9RrwNPkul6sM5yjz2PgwSTxg/KW/JHjodJK9hHEWe+BO9+IgNEyVCZcIE6f3c=
   on:
     repo: RevelutionWind/MDB
     branch: '1.0'
