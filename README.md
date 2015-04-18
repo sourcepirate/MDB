@@ -3,6 +3,14 @@
 
 [![Build Status](https://travis-ci.org/RevelutionWind/MDB.svg?branch=master)](https://travis-ci.org/RevelutionWind/MDB)
 
+<h2> Installation </h2>
+  Inorder to install
+  
+  ```
+   pip install mondb
+
+  ```
+
 <h2> Models </h2>
  Inorder to create a Model you first need to inherit Document class in Mongodb
  

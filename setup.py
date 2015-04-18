@@ -6,7 +6,7 @@ def readme():
 setup(
     name = 'mondb',
     packages = ['mdb'],
-    version = '0.0.1',
+    version = '0.0.2',
     long_description= "MODELS for MONGODB",
     description = 'MongoDB Models',
     author='plasmashadow',
