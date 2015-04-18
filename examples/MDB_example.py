@@ -1,12 +1,12 @@
 __author__ = 'plasmashadow'
 
 
-from mdb.Connection import create_engine
-import mdb
-class Management(mdb.Document):
+from mondb.Connection import create_engine
+import mondb
+class Management(mondb.Document):
 
-    name = mdb.StringProperty(str, required=True)
-    age = mdb.StringProperty(str, required=True)
+    name = mondb.StringProperty(str, required=True)
+    age = mondb.StringProperty(str, required=True)
 
 create_engine(database ="opendesk", host= "localhost", port=27017)
 

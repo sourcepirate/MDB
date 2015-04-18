@@ -2,7 +2,7 @@ __author__ = 'plasmashadow'
 
 from pymongo.connection import Connection as MongoConnection
 from pymongo.errors import ConnectionFailure
-from mdb.urltools import UrlBuilder
+from mondb.urltools import UrlBuilder
 
 
 class Connection(object):

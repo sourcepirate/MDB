@@ -14,12 +14,12 @@
 # all copies or substantial portions of the Software
 """
   MongoDB Models are just like ndb models where the user can persist
-  the records with extending it with mdb.Model class.
+  the records with extending it with mondb.Model class.
 
-  class Person(mdb.Model):
-       name = mdb.StringProperty()
-       age  = mdb.IntegerProperty()
-       person_id = mdb.StringProperty(key = True)
+  class Person(mondb.Model):
+       name = mondb.StringProperty()
+       age  = mondb.IntegerProperty()
+       person_id = mondb.StringProperty(key = True)
 
   Note: that the primary key is set to custom key
 """

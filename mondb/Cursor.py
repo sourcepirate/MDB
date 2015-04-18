@@ -86,5 +86,4 @@ class Cursor(MongoCursor):
 
     def change(self, **kwargs):
         modifier = {"$set": kwargs}
-        print modifier
         return self.update(modifier)

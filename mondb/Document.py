@@ -2,12 +2,12 @@ __author__ = 'plasmashadow'
 
 import six
 import json
-import mdb
-from mdb.Property import Property, EmptyProperty
-from mdb.Cursor import Cursor
-from mdb.Connection import Connection
-from mdb.Decorators import notinstancemethod
-from mdb.Decorators import deprecated
+import mondb
+from mondb.Property import Property, EmptyProperty
+from mondb.Cursor import Cursor
+from mondb.Connection import Connection
+from mondb.Decorators import notinstancemethod
+from mondb.Decorators import deprecated
 
 """used to check for older dependencies"""
 try:
@@ -65,7 +65,6 @@ class ModelMeta(type):
 
     def __setattr__(cls, key, value):
         super(ModelMeta, cls).__setattr__(key, value)
-        print value
         if isinstance(value, Property):
             cls._update_fields()
 
@@ -154,7 +153,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
     def _auto_create_fields(self):
         if hasattr(self, "AUTO_CREATE_FIELDS"):
             return self.AUTO_CREATE_FIELDS
-        return mdb.AUTO_CREATE_FIELDS
+        return mondb.AUTO_CREATE_FIELDS
 
     @property
     def _fields(self):

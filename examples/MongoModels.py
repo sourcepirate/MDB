@@ -1,7 +1,7 @@
 __author__ = 'plasmashadow'
 
-import mdb
-from mdb import create_engine
+import mondb
+from mondb import create_engine
 
 conn = create_engine(host="localhost", database="opendesk")
 
@@ -9,16 +9,16 @@ conn = create_engine(host="localhost", database="opendesk")
 class Meta:
     connection = conn
 
-class DocumentConfig(mdb.Document, Meta):
+class DocumentConfig(mondb.Document, Meta):
     pass
 
 class SampleDoc(DocumentConfig):
-    name = mdb.StringData()
-    age = mdb.IntegerData()
+    name = mondb.StringData()
+    age = mondb.IntegerData()
 
-class Sample(mdb.Document, Meta):
-    name = mdb.StringData()
-    age = mdb.IntegerData()
+class Sample(mondb.Document, Meta):
+    name = mondb.StringData()
+    age = mondb.IntegerData()
 
 s = SampleDoc()
 s.name = "sathya"

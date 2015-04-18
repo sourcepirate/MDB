@@ -5,8 +5,8 @@ def readme():
 
 setup(
     name = 'mondb',
-    packages = ['mdb'],
-    version = '0.0.2',
+    packages = ['mondb', 'mondb/urltools'],
+    version = '0.0.2.5',
     long_description= "MODELS for MONGODB",
     description = 'MongoDB Models',
     author='plasmashadow',
@@ -22,6 +22,6 @@ setup(
         'Environment :: Console',
         'Intended Audience :: Science/Research',
     ],
-    install_requires=['pymongo>=2.8', 'six >= 1.9.0'],
+    install_requires=['pymongo==2.8', 'six >= 1.9.0'],
     test_suite="test"
 )
