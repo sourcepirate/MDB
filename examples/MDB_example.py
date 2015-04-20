@@ -15,4 +15,4 @@ create_engine(database ="opendesk", host= "localhost", port=27017)
 m = Management(name = "sathya", age= 13)
 m.save()
 cs = Management.find({"name":"sathya"})
-print cs[0].name
+print cs.next()
