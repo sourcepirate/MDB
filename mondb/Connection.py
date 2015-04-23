@@ -65,8 +65,8 @@ class Connection(object):
             database = database
         return self._connection[database]
 
-    def get_collection(self, collection, database):
-        return self.get_connection(database=database.lower())[collection]
+    def get_collection(self, collection, database=None):
+        return self.get_connection(database=database)[collection]
 
 class Transaction(object):
 

@@ -446,7 +446,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         """
         if not cls._collection:
             conn = Connection.get_instance()
-            collection = conn.get_collection(cls._get_name(), cls.__name__)
+            collection = conn.get_collection(cls._get_name())
             cls._collection = collection
         return cls._collection
 
