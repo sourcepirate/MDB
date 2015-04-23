@@ -151,6 +151,18 @@ class Document(six.with_metaclass(ModelMeta, dict)):
 
     @property
     def _auto_create_fields(self):
+        """
+           Auto Create Fields.
+           Consider a Model class having the following definition
+          >>> class Management(mondb.Document):
+          >>>    name = mondb.StringProperty()
+          >>>
+          >>>m = Management()
+          >>>m.age = 23
+          Since age is not in the Management Model we cannot assign it
+          But by setting the AutoCreate Fields to True we can achive this.
+        :return:
+        """
         if hasattr(self, "AUTO_CREATE_FIELDS"):
             return self.AUTO_CREATE_FIELDS
         return mondb.AUTO_CREATE_FIELDS
@@ -207,8 +219,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         self._check_required()
         new_object_id = collection.save(self.copy(), *args, **kwargs)
         if not self._get_id():
-            self._id_field = new_object_id
-            #super(Document, self).__setattr__(self._id_field, new_object_id)
+            self[self._id_field] = new_object_id
         return new_object_id
 
     @classmethod

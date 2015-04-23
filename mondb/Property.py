@@ -77,6 +77,7 @@ class Property(object):
     def _set_default(self, model, field):
         if field in model:
             return
+        default_value = None
         if hasattr(self, "default"):
             if not callable(self.default):
                 default_value = self.default
@@ -142,6 +143,9 @@ class ReferenceProperty(Property):
 
 class StringProperty(Property):
 
+    def __init__(self, *args, **kwargs):
+        super(StringProperty, self).__init__(str, *args, **kwargs)
+
     def _get_callback(self, instance, value):
         return str(value)
 
@@ -149,6 +153,9 @@ class StringProperty(Property):
         return str(value)
 
 class IntegerProperty(Property):
+
+    def __init__(self, *args, **kwargs):
+        super(IntegerProperty, self).__init__(int, *args, **kwargs)
 
     def _get_callback(self, instance, value):
         return int(value)
