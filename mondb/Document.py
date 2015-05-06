@@ -226,6 +226,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
     def _class_update(cls, *args, **kwargs):
         """
           Used for updating the Model Class
+          Note: Just for hacking.
         :param args:
         :param kwargs:
         :return:

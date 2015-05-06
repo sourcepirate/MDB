@@ -1,9 +1,10 @@
 
-<h1>MDB- MongoDB Models </h1>  
+#MDB- MongoDB Models
 
 [![Build Status](https://travis-ci.org/RevelutionWind/MDB.svg?branch=master)](https://travis-ci.org/RevelutionWind/MDB)
-
-<h2> Installation </h2>
+[![PyPI version](https://badge.fury.io/py/mondb.svg)](http://badge.fury.io/py/mondb)
+[![PyPI](https://img.shields.io/pypi/dm/Django.svg)](https://pypi.python.org/pypi/mondb)
+##Installation
   Inorder to install
   
   ```
@@ -11,7 +12,7 @@
 
   ```
 
-<h2> Models </h2>
+##Models
  Inorder to create a Model you first need to inherit Document class in Mongodb
  
  ```python

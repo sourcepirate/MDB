@@ -1,7 +1,7 @@
 from setuptools import setup
 
 def readme():
-    return open("README.md").read()
+    return open("README.md", "r").read()
 
 setup(
     name = 'mondb',
