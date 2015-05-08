@@ -8,6 +8,7 @@ from mondb.Cursor import Cursor
 from mondb.Connection import Connection
 from mondb.Decorators import notinstancemethod
 from mondb.Decorators import deprecated
+from mondb.MongoLogger import log
 
 """used to check for older dependencies"""
 try:
@@ -17,7 +18,6 @@ except ImportError:
     from bson.dbref import DBRef
     from bson.objectid import ObjectId
 
-import logging
 
 class BiContextual(object):
 
@@ -257,7 +257,6 @@ class Document(six.with_metaclass(ModelMeta, dict)):
             field = getattr(self.__class__, key)
             field_name = field._get_field_name(self)
             body[field_name] = self[field_name]
-            logging.debug("Checking fields (%s).", checks)
             self._check_required(*checks)
             collection = self._get_collection()
             #mongodb uses set to store the body of mongodb collections
