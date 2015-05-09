@@ -5,8 +5,8 @@ def readme():
 
 setup(
     name = 'mondb',
-    packages = ['mondb', 'mondb/urltools'],
-    version = '0.0.2.6',
+    packages = ['mondb', 'mondb/urltools', 'mondb/Query'],
+    version = '0.0.2.7',
     long_description= "MODELS for MONGODB",
     description = 'MongoDB Models',
     author='plasmashadow',
