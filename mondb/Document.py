@@ -8,7 +8,8 @@ from mondb.Cursor import Cursor
 from mondb.Connection import Connection
 from mondb.Decorators import notinstancemethod
 from mondb.Decorators import deprecated
-from mondb.MongoLogger import log
+from mondb.MongoLogger import Logger
+log = Logger()
 
 """used to check for older dependencies"""
 try:
@@ -135,16 +136,20 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         for key, value in kwargs.iteritems():
             if is_new_instance:
                 if key in self._fields.values():
+                    # log.info(["if", key, value])
                     setattr(self, key, value)
                 else:
                     if not create_fields:
                         raise UnknownField("Unknown Field %s"%key)
                     self.add_field(key, Property())
+                    # log.info([key, value])
                     setattr(self, key, value)
             else:
                 self[key] = value
+                # log.info(["else", key, value])
 
         for field_name in self._fields.values():
+
             attr = getattr(self.__class__, field_name)
             self._fields[attr._id] = field_name
             attr._set_default(self, field_name)
@@ -187,6 +192,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
             attr = getattr(cls, attr_key)
             if not isinstance(attr, Property):
                 continue
+            # log.debug([attr._id, attr_key])
             cls.__fields[attr._id] = attr_key
 
     @classmethod
@@ -197,8 +203,8 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         :param new_field_descriptor:  new Field Descriptor
         :return:
         """
-
         setattr(cls, field_name, new_field_descriptor)
+        log.info(["field_name", field_name, new_field_descriptor])
         cls._update_fields()
 
     def _get_id(self):
@@ -207,6 +213,10 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         :return:
         """
         return self.get(self._id_field)
+
+    def key(self):
+        log.debug(self._fields)
+        return self["_id"]
 
     def save(self, *args, **kwargs):
         """
@@ -217,6 +227,10 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         """
         collection = self._get_collection()
         self._check_required()
+        # if self.get("id"):
+        #     self[self._id_field] = self.get("id")
+        #     del self["id"]
+        log.info(self.copy())
         new_object_id = collection.save(self.copy(), *args, **kwargs)
         if not self._get_id():
             self[self._id_field] = new_object_id
@@ -234,7 +248,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         collection = cls._get_collection()
         return collection.update(*args, **kwargs)
 
-    def _instance_update(self,*args, **kwargs):
+    def _instance_update(self, *args, **kwargs):
         """
           Used as wrapper for Pymongo's update
         :return:
@@ -250,8 +264,10 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         checks = []
         for key, value in kwargs.iteritems():
             if key in self._fields.values():
+                log.debug("entering this if")
                 setattr(self, key, value)
             else:
+                log.debug("entering else")
                 self[key] = value
             checks.append(key)
             field = getattr(self.__class__, key)
@@ -276,7 +292,6 @@ class Document(six.with_metaclass(ModelMeta, dict)):
             field_names = self._fields.values()
 
         for field_name in field_names:
-
             field_value = getattr(self.__class__, field_name)
             #the name on what it is stored on mongodb
             storage_name = field_value._get_field_name(self)

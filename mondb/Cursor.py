@@ -44,6 +44,8 @@ class Cursor(MongoCursor):
         :param kwargs:
         :return:
         """
+        if self.count() ==0:
+            raise IndexError("list index out of range")
         value = MongoCursor.__getitem__(self, *args, **kwargs)
         if type(value) == self.__class__:
             return value
@@ -69,7 +71,7 @@ class Cursor(MongoCursor):
         for key, value in kwargs.iteritems():
             if value not in [ASC, DSC]:
                 raise TypeError("Order value must be either ASC for Ascending and DSC for descending")
-            self._order_entities.append((key,value))
+            self._order_entities.append((key, value))
             self.sort(self._order_entities)
         return self
 
@@ -87,3 +89,6 @@ class Cursor(MongoCursor):
     def change(self, **kwargs):
         modifier = {"$set": kwargs}
         return self.update(modifier)
+
+    def __len__(self):
+        return self.count()
