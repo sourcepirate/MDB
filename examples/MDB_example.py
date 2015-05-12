@@ -18,14 +18,12 @@ class Company(mondb.Document):
 
 create_engine(database ="opendesk", host= "localhost", port=27017)
 
-# for x in range(15):
-#     c = Company(age=x)
-#     c.name = "sathya"
-#     c.save()
-
-# # # m.save()
-# cs = Company.search({"age": 23})
-# print [cs.key() for cs in cs]
+c = Company(age= 13)
+c.name = "hello"
+c.save()
+# # m.save()
+cs = Company.search({"age": 23})
+print [cs.key() for cs in cs]
 # #
 # m = Management(name = "sathya", age= 13, company = c)
 # m.save()
