@@ -38,3 +38,16 @@
     
 
  ```
+ 
+ 
+##Query
+ 
+ ```
+ 
+  query = mdb.Query(Management)
+  query.filter("name", "==", "sathya")
+  lst = query.fetch()
+  for l in lst:
+      print l
+      
+ ```

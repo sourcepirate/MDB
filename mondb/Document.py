@@ -215,7 +215,6 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         return self.get(self._id_field)
 
     def key(self):
-        log.debug(self._fields)
         return self["_id"]
 
     def save(self, *args, **kwargs):
@@ -299,6 +298,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
                 if field_value.requried:
                     raise EmptyProperty("Required property is left empyty %s"%storage_name)
 
+
     def delete(self, *args, **kwargs):
         """
         Used to Remove a model
@@ -311,7 +311,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         collection = self._get_collection()
         return self.remove(self._get_id(), *args, **kwargs)
 
-    @notinstancemethod
+    @classmethod
     def remove(cls, *args, **kwargs):
         """
          Just a Wrapper Around the Collection Remove

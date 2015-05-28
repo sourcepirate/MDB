@@ -33,7 +33,7 @@ class Query(object):
 
 
 
-    def fetch(self, offset=None, start_cursor=None):
+    def fetch(self, offset=None, limit=None, start_cursor=None):
         """
         Fetch the result of the particular query
         :param offset:
@@ -44,4 +44,10 @@ class Query(object):
         temp = self.findstr
         self.findstr = {}
         log.info(temp)
+        if offset:
+            if not limit:
+                return self.model.find(temp)[offset:]
+            return self.model.find(temp)[offset:limit]
+        if limit:
+            return self.model.find(temp)[:limit]
         return self.model.find(temp)

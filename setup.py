@@ -8,7 +8,7 @@ setup(
     packages = ['mondb', 'mondb/urltools', 'mondb/Query'],
     version = '0.0.2.7',
     long_description= "MODELS for MONGODB",
-    description = 'MongoDB Models',
+    description = readme(),
     author='plasmashadow',
     author_email='plasmashadowx@gmail.com',
     url='https://github.com/RevelutionWind/MDB.git',
@@ -22,6 +22,6 @@ setup(
         'Environment :: Console',
         'Intended Audience :: Science/Research',
     ],
-    install_requires=['pymongo >= 2.8', 'six >= 1.9.0'],
+    install_requires=['pymongo >= 2.8', 'six >= 1.9.0', 'mock'],
     test_suite="test"
 )

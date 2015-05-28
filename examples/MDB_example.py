@@ -18,21 +18,24 @@ class Company(mondb.Document):
 
 create_engine(database ="opendesk", host= "localhost", port=27017)
 
-c = Company(age= 13)
-c.name = "hello"
-c.save()
+# c = Company(age= 13)
+# c.name = "hello"
+# c.save()
+# c.delete()
 # # m.save()
-cs = Company.search({"age": 23})
-print [cs.key() for cs in cs]
+# cs = Company.search({"age": 23})
+# print [cs.key() for cs in cs]
 # #
 # m = Management(name = "sathya", age= 13, company = c)
 # m.save()
 # cs = Management.find({"name":"sathya"})
 # # print cs[0].company
-
+#
 q = Query(Company)
 q.filter("age", ">=", 5)
-cs = q.fetch()
+cs = q.fetch(limit=2)
+print cs
 
 for c in cs:
     print c.age
+    c.delete()

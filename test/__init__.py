@@ -1,5 +1,10 @@
 import unittest
+import mock
 
-from mondb.Connection import create_engine
-import mondb
-
+# class FirstTest(unittest.TestCase):
+#
+#     def setUp(self):
+#         self.a = 23
+#
+#     def first_test(self):
+#         self.assertEqual(self.a, 23)
