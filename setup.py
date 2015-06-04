@@ -6,9 +6,9 @@ def readme():
 setup(
     name = 'mondb',
     packages = ['mondb', 'mondb/urltools', 'mondb/Query'],
-    version = '0.0.3',
-    long_description= "MODELS for MONGODB",
-    description = readme(),
+    version = '0.0.3.1',
+    long_description= readme(),
+    description = "MODELS for MONGODB",
     author='plasmashadow',
     author_email='plasmashadowx@gmail.com',
     url='https://github.com/RevelutionWind/MDB.git',
