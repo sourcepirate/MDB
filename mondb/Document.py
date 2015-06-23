@@ -391,16 +391,23 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         :return:
         """
         query = {}
+        ref = False
         for key, value in kwargs.iteritems():
 
             if isinstance(key, Document):
                 # used to get the reference model
+                ref = True
                 value = value._get_ref()
             field = getattr(cls, key)
             if field._field_name:
                 key = field._field_name
 
-            query[key] = value
+            if isinstance(value, str):
+                query[key] = str(value)
+            else:
+                query[key] = value
+        # if not query and args:
+        #     return cls.find(args)
         return cls.find(query)
 
     @classmethod

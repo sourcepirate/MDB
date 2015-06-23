@@ -9,7 +9,8 @@ install:
 - pip install six
 - pip install pymongo
 - pip install python-coveralls
-script: python setup.py install
+services: mongodb
+script: nosetests
 after_success:
 - coveralls
 deploy:

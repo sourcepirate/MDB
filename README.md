@@ -42,7 +42,7 @@
  
 ##Query
  
- ```
+ ```python
  
   query = mdb.Query(Management)
   query.filter("name", "==", "sathya")

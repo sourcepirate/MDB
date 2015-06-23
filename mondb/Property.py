@@ -161,6 +161,8 @@ class IntegerProperty(Property):
         return int(value)
 
     def _set_callback(self, instance, value):
+        if not value:
+            return str(value)
         return int(value)
 
 
