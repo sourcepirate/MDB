@@ -2,7 +2,8 @@ __author__ = 'plasmashadow'
 
 
 from pymongo.cursor import Cursor as MongoCursor
-from pymongo import ASCENDING, DESCENDING
+from pymongo import ASCENDING,
+import six
 
 ASC = ASCENDING
 DSC = DESCENDING
@@ -68,7 +69,7 @@ class Cursor(MongoCursor):
         """
         if len(kwargs) is not 1:
             raise TypeError(" order() requires only one argument")
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
             if value not in [ASC, DSC]:
                 raise TypeError("Order value must be either ASC for Ascending and DSC for descending")
             self._order_entities.append((key, value))

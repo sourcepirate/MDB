@@ -132,7 +132,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         create_fields = self._auto_create_fields
         is_new_instance = self._id_field not in kwargs
 
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
             if is_new_instance:
                 if key in self._fields.values():
                     # log.info(["if", key, value])
@@ -260,7 +260,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
             pass_kwargs["safe"] = kwargs.pop("safe")
         body = {}
         checks = []
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
             if key in self._fields.values():
                 log.debug("entering this if")
                 setattr(self, key, value)
@@ -391,7 +391,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         """
         query = {}
         ref = False
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
 
             if isinstance(key, Document):
                 # used to get the reference model
