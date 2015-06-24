@@ -2,7 +2,7 @@ __author__ = 'plasmashadow'
 
 
 from pymongo.cursor import Cursor as MongoCursor
-from pymongo import ASCENDING,
+from pymongo import ASCENDING, DESCENDING
 import six
 
 ASC = ASCENDING
