@@ -7,7 +7,8 @@
 [![Code Health](https://landscape.io/github/RevelutionWind/MDB/master/landscape.svg?style=flat)](https://landscape.io/github/RevelutionWind/MDB/master)
 
 ##Installation
-  Inorder to install
+  
+  You can install mondb from its official pypi repository.
   
   ```
    pip install mondb
@@ -15,39 +16,83 @@
   ```
 
 ##Models
- Inorder to create a Model you first need to inherit Document class in Mongodb
+ Inorder to create a Model you first need to inherit Document class in Mondb
  
  ```python
- from mdb.Connection import create_engine
- import mdb
+ from mondb.Connection import create_engine
+ import mondb
  
+ 
+ #used to establish a connection with the collection
  create_engine(database ="Management", host= "localhost", port=27017)
  
- class Management(mdb.Document):
-     name = mdb.StringProperty()
-     age = mdb.IntegerProperty()
  
- m = Management(name = "sathya", age =23)
+ class User(mdb.Document):
+     name = mondb.StringProperty()
+     age = mondb.IntegerProperty()
+ 
+ m = User(name = "sathya", age =23)
  m.save()
- 
- #inorder to query the entity
- 
- cursor = Management.find({"name":"sathya"})
- for element in cursor:
-    print element[0].name,element[0].age
-    
-
  ```
  
+##Searching and Updating
+
+ In most of the case where the user needs to search and update models.
+ Mondb comes with methods such as <b>search()</b> and <b>find()</b> for finding
+ a document from the collection.
+ 
+ 
+ ```python
+ 
+ #search returns a matching records as pymongo cursor.
+ cursor = User.search(name="sathya")
+ 
+ # Note:
+ #    cursor is not a list but can be indexed. use list(cursor) if you want to use
+ #    it as a list
+ 
+ for record in cursor:
+     print record
+ 
+ ```
  
 ##Query
  
+ Mondb also comes with a Query object where you can Query with some 
+ criteria.
+ 
  ```python
  
-  query = mdb.Query(Management)
-  query.filter("name", "==", "sathya")
-  lst = query.fetch()
-  for l in lst:
-      print l
-      
+ query = mondb.Query(User)
+ 
+ query.filter("age", ">=", 20)
+ 
+ lst = query.fetch()
+ 
+ for l in lst:
+     print l
+ 
  ```
+ 
+ Methods such as <b>filter()</b> and <b> fetch()</b> will be handy for getting results from
+ the query.
+ 
+ 
+##Deleting
+
+ Mondb models can be deleted with the help of <b> delete() </b> method.
+ 
+ ```python
+ 
+ user = User.search(age=23)[0]
+ user.delete()
+ 
+ ```
+ 
+ 
+##License
+
+<h4>MIT</h4>
+ 
+ 
+ 
