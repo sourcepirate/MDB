@@ -7,7 +7,6 @@ from mondb.Property import Property, EmptyProperty
 from mondb.Cursor import Cursor
 from mondb.Connection import Connection
 from mondb.Decorators import notinstancemethod
-from mondb.Decorators import deprecated
 from mondb.MongoLogger import Logger
 log = Logger()
 

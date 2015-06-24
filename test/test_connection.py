@@ -2,8 +2,8 @@ __author__ = 'plasmashadow'
 
 import unittest
 import mock
-from mondb.Connection import create_engine
 import mondb
+from mondb.Connection import create_engine
 import random
 
 

@@ -15,8 +15,8 @@ class notinstancemethod(object):
         return self.func.__get__(obj, objtype)
 
 
-def deprecated(self,func, *args, **kwargs):
-    print "%s is deprecated and not safe to use for huge Collections" %(func.__name__)
-    def inner(self, *args, **kwargs):
-        return func(self, *args, **kwargs)
-    return inner(self, *args, **kwargs)
+# def deprecated(self,func, *args, **kwargs):
+#     print "%s is deprecated and not safe to use for huge Collections" %(func.__name__)
+#     def inner(self, *args, **kwargs):
+#         return func(self, *args, **kwargs)
+#     return inner(self, *args, **kwargs)
