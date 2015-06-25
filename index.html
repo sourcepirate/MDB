@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Mondb by RevelutionWind</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/RevelutionWind/MDB">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/RevelutionWind/MDB/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/RevelutionWind/MDB/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Mondb</h1>
+          <p>MongoDB Models.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/RevelutionWind">RevelutionWind</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a id="mondb" class="anchor" href="#mondb" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mondb</h1>
+
+<p><a href="https://travis-ci.org/RevelutionWind/MDB"><img src="https://travis-ci.org/RevelutionWind/MDB.svg?branch=master" alt="Build Status"></a>
+<a href="http://badge.fury.io/py/mondb"><img src="https://badge.fury.io/py/mondb.svg" alt="PyPI version"></a>
+<a href="https://pypi.python.org/pypi/mondb"><img src="https://img.shields.io/pypi/dm/mondb.svg" alt="PyPI"></a>
+<a href="https://landscape.io/github/RevelutionWind/MDB/master"><img src="https://landscape.io/github/RevelutionWind/MDB/master/landscape.svg?style=flat" alt="Code Health"></a></p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>You can install mondb from its official pypi repository.</p>
+
+<pre><code>   pip install mondb
+
+</code></pre>
+
+<h2>
+<a id="models" class="anchor" href="#models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Models</h2>
+
+<p>Inorder to create a Model you first need to inherit Document class in Mondb</p>
+
+<div class="highlight highlight-python"><pre> <span class="pl-k">from</span> mondb.Connection <span class="pl-k">import</span> create_engine
+ <span class="pl-k">import</span> mondb
+
+
+ <span class="pl-c">#used to establish a connection with the collection</span>
+ create_engine(<span class="pl-smi">database</span> <span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Management<span class="pl-pds">"</span></span>, <span class="pl-smi">host</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>localhost<span class="pl-pds">"</span></span>, <span class="pl-smi">port</span><span class="pl-k">=</span><span class="pl-c1">27017</span>)
+
+
+ <span class="pl-k">class</span> <span class="pl-en">User</span>(<span class="pl-e">mdb.Document</span>):
+     name <span class="pl-k">=</span> mondb.StringProperty()
+     age <span class="pl-k">=</span> mondb.IntegerProperty()
+
+ m <span class="pl-k">=</span> User(<span class="pl-smi">name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>sathya<span class="pl-pds">"</span></span>, <span class="pl-smi">age</span> <span class="pl-k">=</span><span class="pl-c1">23</span>)
+ m.save()</pre></div>
+
+<h2>
+<a id="searching-and-updating" class="anchor" href="#searching-and-updating" aria-hidden="true"><span class="octicon octicon-link"></span></a>Searching and Updating</h2>
+
+<p>In most of the case where the user needs to search and update models.
+ Mondb comes with methods such as <b>search()</b> and <b>find()</b> for finding
+ a document from the collection.</p>
+
+<div class="highlight highlight-python"><pre>
+ <span class="pl-c">#search returns a matching records as pymongo cursor.</span>
+ cursor <span class="pl-k">=</span> User.search(<span class="pl-smi">name</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>sathya<span class="pl-pds">"</span></span>)
+
+ <span class="pl-c"># Note:</span>
+ <span class="pl-c">#    cursor is not a list but can be indexed. use list(cursor) if you want to use</span>
+ <span class="pl-c">#    it as a list</span>
+
+ <span class="pl-k">for</span> record <span class="pl-k">in</span> cursor:
+     <span class="pl-k">print</span> record
+</pre></div>
+
+<h2>
+<a id="query" class="anchor" href="#query" aria-hidden="true"><span class="octicon octicon-link"></span></a>Query</h2>
+
+<p>Mondb also comes with a Query object where you can Query with some 
+ criteria.</p>
+
+<div class="highlight highlight-python"><pre>
+ query <span class="pl-k">=</span> mondb.Query(User)
+
+ query.filter(<span class="pl-s"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>&gt;=<span class="pl-pds">"</span></span>, <span class="pl-c1">20</span>)
+
+ lst <span class="pl-k">=</span> query.fetch()
+
+ <span class="pl-k">for</span> l <span class="pl-k">in</span> lst:
+     <span class="pl-k">print</span> l
+</pre></div>
+
+<p>Methods such as <b>filter()</b> and <b> fetch()</b> will be handy for getting results from
+ the query.</p>
+
+<h2>
+<a id="deleting" class="anchor" href="#deleting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deleting</h2>
+
+<p>Mondb models can be deleted with the help of <b> delete() </b> method.</p>
+
+<div class="highlight highlight-python"><pre>
+ user <span class="pl-k">=</span> User.search(<span class="pl-smi">age</span><span class="pl-k">=</span><span class="pl-c1">23</span>)[<span class="pl-c1">0</span>]
+ user.delete()
+</pre></div>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<h4>
+<a id="mit" class="anchor" href="#mit" aria-hidden="true"><span class="octicon octicon-link"></span></a>MIT</h4>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
