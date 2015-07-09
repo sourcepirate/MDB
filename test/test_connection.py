@@ -13,6 +13,8 @@ class CrudTest(unittest.TestCase):
         class User(mondb.Document):
             name = mondb.StringProperty()
             age = mondb.IntegerProperty()
+            time = mondb.DateTimeProperty(auto_add=True)
+            lst = mondb.ListProperty()
 
         self.User = User
 
@@ -21,7 +23,11 @@ class CrudTest(unittest.TestCase):
         user = self.User()
         user.name = "sathya"
         user.age = 23
+        user.lst = [1, 2, 5]
         user.save()
+        results = self.User.find({})
+        for res in results:
+            print res.time
         self.assertEqual(user.name, "sathya")
 
     def test_search(self):

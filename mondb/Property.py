@@ -2,8 +2,12 @@ __author__ = 'plasmashadow'
 
 try:
     from pymongo.dbref import DBRef
+    from pymongo.objectid import ObjectId
 except ImportError:
     from bson.dbref import DBRef
+    from bson.objectid import ObjectId
+
+from datetime import datetime
 
 
 class EmptyProperty(Exception):
@@ -165,6 +169,54 @@ class IntegerProperty(Property):
             return str(value)
         return int(value)
 
+class DateTimeProperty(Property):
+
+    def __init__(self, *args, **kwargs):
+        super(DateTimeProperty, self).__init__(datetime, *args, **kwargs)
+        self.auto_add = kwargs.get("auto_add", False)
+        self.utc = kwargs.get("utc", True)
+
+    def _get_callback(self, instance, value):
+        if not isinstance(value, datetime):
+            raise TypeError("Should be a python datetime object")
+        return value
+
+    def _set_callback(self, instance, value):
+        if not value and not self.auto_add:
+            raise TypeError("Invalid datetime object")
+        if self.auto_add:
+            value = datetime.utcnow() if self.utc else datetime.now()
+        return value
+
+class ListProperty(Property):
+
+    def __init__(self, *args, **kwargs):
+        super(ListProperty, self).__init__(list, *args, **kwargs)
+
+    def _get_callback(self, instance, value):
+        return value
+
+    def _set_callback(self, instance, value):
+        if not value:
+            return list()
+
+        def _all(itr):
+            return True if isinstance(itr, int) or isinstance(itr, str) or isinstance(itr, datetime) else False
+
+        if not all(map(_all, value)):
+            raise TypeError("Value should in int, 'str', datetime")
+        return value
+
+class ObjectIDField(Property):
+
+    def __init__(self, *args, **kwargs):
+        super(ObjectIDField, self).__init__(list, *args, **kwargs)
+
+    def _get_callback(self, instance, value):
+        return value
+
+    def _set_callback(self, instance, value):
+        return ObjectId(unicode(value))
 
 
 
