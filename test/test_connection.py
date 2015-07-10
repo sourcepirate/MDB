@@ -3,7 +3,7 @@ __author__ = 'plasmashadow'
 import unittest
 import mondb
 from mondb.Connection import create_engine
-import random
+import random, json
 
 
 class CrudTest(unittest.TestCase):
@@ -15,6 +15,8 @@ class CrudTest(unittest.TestCase):
             age = mondb.IntegerProperty()
             time = mondb.DateTimeProperty(auto_add=True)
             lst = mondb.ListProperty()
+            dct = mondb.DictProperty()
+            jsn = mondb.JsonProperty()
 
         self.User = User
 
@@ -24,10 +26,12 @@ class CrudTest(unittest.TestCase):
         user.name = "sathya"
         user.age = 23
         user.lst = [1, 2, 5]
+        user.dct = {'tara': 'adhi'}
+        user.jsn = json.dumps({"hey": "hello"})
         user.save()
         results = self.User.find({})
         for res in results:
-            print res.time
+            print res.time, res.dct, res.lst, res.jsn
         self.assertEqual(user.name, "sathya")
 
     def test_search(self):

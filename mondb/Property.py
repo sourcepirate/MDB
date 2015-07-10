@@ -8,6 +8,7 @@ except ImportError:
     from bson.objectid import ObjectId
 
 from datetime import datetime
+import json
 
 
 class EmptyProperty(Exception):
@@ -207,16 +208,45 @@ class ListProperty(Property):
             raise TypeError("Value should in int, 'str', datetime")
         return value
 
-class ObjectIDField(Property):
+class ObjectIDProperty(Property):
 
     def __init__(self, *args, **kwargs):
-        super(ObjectIDField, self).__init__(list, *args, **kwargs)
+        super(ObjectIDProperty, self).__init__(list, *args, **kwargs)
 
     def _get_callback(self, instance, value):
         return value
 
     def _set_callback(self, instance, value):
+
         return ObjectId(unicode(value))
+
+class DictProperty(Property):
+
+    def __init__(self, *args, **kwargs):
+        super(DictProperty, self).__init__(dict, *args, **kwargs)
+
+    def _get_callback(self, instance, value):
+        return value
+
+    def _set_callback(self, instance, value):
+        if not value:
+            return dict()
+        return dict(value)
+
+class JsonProperty(Property):
+
+    def __init__(self, *args, **kwargs):
+        super(JsonProperty, self).__init__(str, *args, **kwargs)
+
+    def _get_callback(self, instance, value):
+        return json.loads(value)
+
+    def _set_callback(self, instance, value):
+        if not value:
+            return json.dumps(dict())
+        if not isinstance(value, str):
+            raise TypeError("not a json string")
+        return value
 
 
 
