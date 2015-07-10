@@ -29,9 +29,6 @@ class CrudTest(unittest.TestCase):
         user.dct = {'tara': 'adhi'}
         user.jsn = json.dumps({"hey": "hello"})
         user.save()
-        results = self.User.find({})
-        for res in results:
-            print res.time, res.dct, res.lst, res.jsn
         self.assertEqual(user.name, "sathya")
 
     def test_search(self):
