@@ -371,6 +371,9 @@ class Document(six.with_metaclass(ModelMeta, dict)):
             result = cls(**result)
         return result
 
+    @classmethod
+    def get_by_id(cls, id):
+        return cls.find_one({"_id": ObjectId(id)})
 
     @classmethod
     def group(cls, *args, **kwargs):
