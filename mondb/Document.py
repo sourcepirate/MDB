@@ -14,9 +14,11 @@ log = Logger()
 try:
     from pymongo.dbref import DBRef
     from pymongo.objectid import ObjectId
+    from pymongo import TEXT
 except ImportError:
     from bson.dbref import DBRef
     from bson.objectid import ObjectId
+    from pymongo import TEXT
 
 
 class BiContextual(object):
@@ -192,6 +194,11 @@ class Document(six.with_metaclass(ModelMeta, dict)):
             if not isinstance(attr, Property):
                 continue
             # log.debug([attr._id, attr_key])
+
+            # # Indexing
+            # if attr._indexed:
+            #     cls.ensure_index([attr_key])
+
             cls.__fields[attr._id] = attr_key
 
     @classmethod
@@ -203,7 +210,7 @@ class Document(six.with_metaclass(ModelMeta, dict)):
         :return:
         """
         setattr(cls, field_name, new_field_descriptor)
-        log.info(["field_name", field_name, new_field_descriptor])
+        # log.info(["field_name", field_name, new_field_descriptor])
         cls._update_fields()
 
     def _get_id(self):

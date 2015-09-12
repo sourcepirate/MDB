@@ -3,9 +3,11 @@ __author__ = 'plasmashadow'
 try:
     from pymongo.dbref import DBRef
     from pymongo.objectid import ObjectId
+    from pymongo import TEXT, HASHED
 except ImportError:
     from bson.dbref import DBRef
     from bson.objectid import ObjectId
+    from pymongo import TEXT, HASHED
 
 from datetime import datetime
 import json
@@ -30,6 +32,8 @@ class Property(object):
         """
         self._value_type = value_type or self._value_type
         self._required = kwargs.get("required", False) or False
+        self._indexed = kwargs.get("indexed", False) or False
+
         if "default" in kwargs:
             self.default = kwargs["default"]
         _set_callback = getattr(self, "_set_callback", None)

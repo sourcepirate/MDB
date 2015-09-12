@@ -11,12 +11,11 @@ class CrudTest(unittest.TestCase):
         create_engine(host="localhost", port=27017, database="test")
 
         class User(mondb.Document):
-            name = mondb.StringProperty()
+            name = mondb.StringProperty(indexed=True)
             age = mondb.IntegerProperty()
             time = mondb.DateTimeProperty(auto_add=True)
             lst = mondb.ListProperty()
             dct = mondb.DictProperty()
-            jsn = mondb.JsonProperty()
 
         self.User = User
 
@@ -27,7 +26,6 @@ class CrudTest(unittest.TestCase):
         user.age = 23
         user.lst = [1, 2, 5]
         user.dct = {'tara': 'adhi'}
-        user.jsn = json.dumps({"hey": "hello"})
         user.save()
         self.assertEqual(user.name, "sathya")
 
