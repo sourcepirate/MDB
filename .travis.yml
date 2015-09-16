@@ -19,5 +19,4 @@ deploy:
   password:
     secure: pAcn6F8lBPUMUpPSDxTr20flRijyqTfvWI9tgr0+PSTT53kOY3fRiE6b6EOEMvNbw6Avt7VxYgBCE7Rk1wspDQw3Q+8wSwYUC8REN4E5OWOvRE9RrwNPkul6sM5yjz2PgwSTxg/KW/JHjodJK9hHEWe+BO9+IgNEyVCZcIE6f3c=
   on:
-    repo: RevelutionWind/MDB
     branch: 'master'
