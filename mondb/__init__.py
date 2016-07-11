@@ -29,6 +29,10 @@ from .Document import *
 
 AUTO_CREATE_FIELDS = False
 
+
 class EngineException(Exception):
     pass
 
+
+def create_engine(*args, **kwargs):
+    return Connection().connect(*args, **kwargs)

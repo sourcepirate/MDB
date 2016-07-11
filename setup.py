@@ -22,6 +22,6 @@ setup(
         'Environment :: Console',
         'Intended Audience :: Science/Research',
     ],
-    install_requires=['pymongo >= 2.8', 'six >= 1.9.0', 'mock'],
+    install_requires=['six', 'motor', 'mock', 'tornado'],
     test_suite="test"
 )
